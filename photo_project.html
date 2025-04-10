@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('.catalogue-header a');
+            header.href = 'index.html';
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('id');
+            const projectLink = document.querySelector(`.portfolio-list a[href="photo_project.html?id=${projectId}"]`);
+
+            if (projectLink) {
+                const projectName = projectLink.textContent.trim();
+                const projectDateElement = projectLink.parentNode.previousElementSibling;
+                const projectDate = projectDateElement ? projectDateElement.textContent.trim() : '';
+                const mediaData = JSON.parse(projectLink.getAttribute('data-media'));
+
+                document.body.classList.add('photo-project-page');
+
+                const headerDiv = document.createElement('div');
+                headerDiv.classList.add('catalogue-header');
+                const homeButton = document.createElement('a');
+                homeButton.href = 'index.html';
+                homeButton.textContent = 'Your Name';
+                headerDiv.appendChild(homeButton);
+                document.body.insertBefore(headerDiv, document.querySelector('.portfolio-list'));
+
+                const dateElement = document.createElement('p');
+                dateElement.classList.add('project-date');
+                dateElement.textContent = projectDate;
+                document.body.insertBefore(dateElement, document.querySelector('.portfolio-list'));
+
+                const nameHeading = document.createElement('h2');
+                nameHeading.classList.add('project-name');
+                nameHeading.textContent = projectName;
+                document.body.insertBefore(nameHeading, document.querySelector('.portfolio-list'));
+
+                const galleryDiv = document.createElement('div');
+                galleryDiv.classList.add('photo-project-gallery');
+                mediaData.forEach(imagePath => {
+                    const img = document.createElement('img');
+                    img.src = imagePath;
+                    galleryDiv.appendChild(img);
+                });
+                document.body.appendChild(galleryDiv);
+            } else {
+                document.body.innerHTML = '<p>Project not found.</p>';
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="portfolio-list" style="display: none;">
+        <section class="project-section">
+            <p class="project-date"></p>
+            <h2 class="project-name">
+                <a href="#"></a>
+            </h2>
+        </section>
+    </div>
+</body>
+</html>
